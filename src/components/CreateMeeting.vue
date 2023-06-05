@@ -104,26 +104,72 @@ export default {
       },
       methods: {
         createMeeting() {
-         
-                this.loading = true;
-                const data = {
-                    email: this.email,
-                };
-                console.log(this.username);
-                axios
-                    .post("http://localhost:3444/meeting", data)
-                    .then((response) => {
-                    let URL =
-                        response.data.join_url.replace(
-                        "https://us04web.zoom.us/j/",
-                        "http://localhost:9999/?"
-                        ) + `?role=1?name=${this.username}`;
+            this.loading = true;
+            const data = {
+                email: this.email,
+            };
+
+            fetch("http://localhost:3444/meeting", {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to create meeting');
+                }
+                })
+                .then((data) => {
+                if (data.join_url) {
+                    let URL = data.join_url.replace(
+                    "https://us04web.zoom.us/j/",
+                    "http://localhost:9999/?"
+                    ) + `?role=1&name=${this.username}`;
                     console.log(URL);
                     window.location.replace(URL);
+
+                    const newData = {
+                    title: this.title,
+                    platform: this.meeting_app,
+                    link: URL,
+                    date: Date.now() + 1,
+                    time: '0800',
+                    };
+
+                    fetch('http://localhost:3444/addreminder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newData),
                     })
-                    .catch((err) => console.error(err));
-                    this.loading = false;
+                    .then((response) => {
+                        if (response.ok) {
+                        console.log('Reminder created:', response.data);
+                        } else {
+                        throw new Error('Failed to create reminder');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error creating reminder:', error);
+                    });
+                } else {
+                    throw new Error('Join URL not found in response');
+                }
+                })
+                .catch((err) => {
+                console.error(err);
+                })
+                .finally(() => {
+                this.loading = false;
+                });
             },
+
+
       }
     
   };

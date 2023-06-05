@@ -37,29 +37,44 @@
                               <fieldset class="form-group position-relative has-icon-left">
                                 <input type="text"
                                     class="form-control form-control-lg input-lg "
-                                   v-model.trim="title"
-                                    placeholder="Enter The Meeting Title" required>
+                                   v-model.trim="reminder.title"
+                                    placeholder="Title" required>
                                 <div class="form-control-position">
                                    
                                 </div>
                               </fieldset>
                               <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text"
+                                    class="form-control form-control-lg input-lg "
+                                   v-model.trim="reminder.platform"
+                                    placeholder="Platform (zoom, Google meet, etc)">
+                              
+                              </fieldset>
+                              <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text"
+                                    class="form-control form-control-lg input-lg "
+                                   v-model.trim="reminder.link"
+                                    placeholder="Link">
+                              
+                              </fieldset>
+                              
+                              <fieldset class="form-group position-relative has-icon-left">
                                 <input type="date"
                                     class="form-control form-control-lg input-lg "
-                                   v-model.trim="date"
-                                    placeholder="date" required>
+                                   v-model.trim="reminder.date"
+                                   required>
                                 <div class="form-control-position">
                                 </div>
                               </fieldset>
                               <fieldset class="form-group position-relative has-icon-left">
                                 <input type="time"
                                     class="form-control form-control-lg input-lg "
-                                   v-model.trim="time"
-                                    placeholder="time" required>
+                                   v-model.trim="reminder.time"
+                                     required>
                                 <div class="form-control-position">
                                 </div>
                               </fieldset>
-                            <button type="submit"  class="btn blue-bg btn-lg btn-block">
+                            <button type="submit" @click.prevent="addreminder()" class="btn blue-bg btn-lg btn-block">
                               Set
                             </button>
                         </form>
@@ -75,21 +90,52 @@
 </template>
 
   <script>
+   import TheLoader from "@/components/TheLoader";
   export default {
     data() {
       return {
         reminder: {
           title: '',
+          link: '',
+          platform: '',
           date: '',
           time: '',
+         
         },
+        loading: null,
       };
     },
-    methods: {
-      createReminder() {
-        // Handle reminder creation logic here
-        console.log('Reminder created:', this.reminder);
+    components: {
+        TheLoader
       },
+    methods: {
+      addreminder() {
+        this.loading = true;
+        const newData = this.reminder;
+        // Convert reminder object to JSON
+        fetch('http://localhost:3444/addreminder', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newData),
+        })
+          .then(response => {
+            if (response.ok) {
+              console.log('reminder added successfully!');
+        
+            
+            } else {
+              console.log('Failed to add reminder to data.json');
+            };
+            this.loading = false;
+          })
+          .catch(error => {
+            console.log('An error occurred:', error);
+            this.loading = false;
+          });
+
+        },
     },
   };
   </script>
