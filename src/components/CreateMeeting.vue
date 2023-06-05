@@ -21,22 +21,29 @@
                 <div class="card-header border-0">
                     <div class="card-title text-center">
                         <div class="p-1">
-                            <a href="/">
+                            <h3>Create Meeting</h3>
+                         
                                 <img src="@/assets/logo.png" alt="Planner"
                                     class="plain-page-logo" width="200px">
-                            </a>
+                           
                         </div>
                     </div>
-                    <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
-                        <span>Zoom</span>
-                    </h6>
                 </div>
                 <div class="card-content">
                     <div class="card-body login">
                      
                         <form class="form-horizontal form-simple" method="POST" action="">
                             <TheLoader v-if="loading"/>
-                            <input type="hidden" name="_token" >                          
+                            <input type="hidden" name="_token" >     
+                            <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text"
+                                    class="form-control form-control-lg input-lg "
+                                   v-model.trim="username"
+                                    placeholder="Your Name" required>
+                                <div class="form-control-position">
+                                    <i class="ft-user"></i>
+                                </div>
+                              </fieldset>                     
                               <fieldset class="form-group position-relative has-icon-left">
                                 <input type="text"
                                     class="form-control form-control-lg input-lg "
@@ -45,31 +52,25 @@
                                 <div class="form-control-position">
                                     <i class="ft-user"></i>
                                 </div>
-                                                            </fieldset>
-                            <fieldset class="form-group position-relative has-icon-left">
-                                <input type="password"
+                              </fieldset>
+                              <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text"
                                     class="form-control form-control-lg input-lg "
-                                    placeholder="Enter Your Account Password" required
-                                   v-model.trim="password">
-                                <div class="form-control-position">
-                                    <i class="fa fa-lock"></i>
-                                </div>
-                                                            </fieldset>
+                                   v-model.trim="title"
+                                    placeholder="Enter Meeting Title" required>
+                              </fieldset>
+                              <div class="form-group">
+                                <h5>Meeting Application</h5> 
+                                <select name="field" class="form-control form-control-lg input-lg" required  v-model="meeting_app">          
+                                    <option value="zoom">Zoom</option>
+                                    <option value="google_meet">Google Meet</option>                  
+                                </select>
+                              </div>
                         
-                            <button type="submit"   class="btn blue-bg btn-lg btn-block">
+                            <button type="submit" @click.prevent="createMeeting()" class="btn blue-bg btn-lg btn-block">
                               Create
                             </button>
                         </form>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="">
-                        <p class="float-sm-right text-center m-0">
-                            New Client?
-                            <router-link  to="/client-register" class="card-link">
-                                Sign Up
-                            </router-link>
-                        </p>
                     </div>
                 </div>
             </div>
@@ -83,21 +84,47 @@
 
 <script>
  import TheLoader from "@/components/TheLoader";
-
+ import axios from "axios";
 export default {
     name: "clientLogIn",
       data() {
           return {
               email: '',
-              password: '',
+              title: '',
+              username: '',
               errorMsg: '',
               error: null,
-              loading: null
+              loading: null,
+              meeting_app: null,
+
           };
       },
       components: {
         TheLoader
       },
+      methods: {
+        createMeeting() {
+         
+                this.loading = true;
+                const data = {
+                    email: this.email,
+                };
+                console.log(this.username);
+                axios
+                    .post("http://localhost:3444/meeting", data)
+                    .then((response) => {
+                    let URL =
+                        response.data.join_url.replace(
+                        "https://us04web.zoom.us/j/",
+                        "http://localhost:9999/?"
+                        ) + `?role=1?name=${this.username}`;
+                    console.log(URL);
+                    window.location.replace(URL);
+                    })
+                    .catch((err) => console.error(err));
+                    this.loading = false;
+            },
+      }
     
   };
 </script>
@@ -107,9 +134,21 @@ export default {
     margin-top: 40px;
     margin-left: 500px;
 }
-
-#send-btn{
-    background-color:#1c68c4;
+.form-group{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.btn{
+    background-color:#9ec6f6;
+}
+@media only screen and (max-width: 768px) {
+    .content {
+    margin-top: 40px;
+    margin-left: 0;
+    padding: 10px;
+}
 }
 
 </style>

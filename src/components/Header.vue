@@ -4,8 +4,7 @@
       
          <ul class="list">
             <li><router-link to="/">Planner</router-link></li>
-            <li><router-link to="/zoom">Zoom</router-link></li>
-            <li><router-link to="/meet">Google Meet</router-link></li>
+            <li><router-link to="/create-meeting">Create Meeting</router-link></li>
             <li><router-link to="/reminder">Reminder</router-link></li>
          </ul>
          <div class="user-wrapper" >
@@ -19,7 +18,7 @@
           <div v-if="profileMenu " class="profile-menu"  @click="toggleProfileMenu">
             <div class="info">
               <div class="right">
-                <h4>profileFirstName profileLastName</h4>
+                <h4>Musunza Festus</h4>
         
                 <br>
                
@@ -77,6 +76,7 @@ export default {
     border-radius: 50%;
     color: #fff;
     background-color: #303030;
+    z-index: 999px;
   }
 .profile-menu {
     position: absolute;
@@ -86,6 +86,7 @@ export default {
     width: 270px;
     background-color: #fff;
     box-shadow: 0 4px 0px -1px #79aae6;
+    z-index: 999;
   }
 header{
     position: fixed;
@@ -110,6 +111,13 @@ li{
 .list{
     display: flex;
     flex-direction: row;
+}
+@media only screen and (max-width: 768px) {
+  .list{
+    display: flex;
+    flex-direction: row;
     justify-content: center;
+   font-size: smaller;
+}
 }
 </style>
