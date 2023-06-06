@@ -100,7 +100,6 @@
           platform: '',
           date: '',
           time: '',
-         
         },
         loading: null,
       };

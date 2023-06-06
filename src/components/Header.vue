@@ -5,7 +5,7 @@
          <ul class="list">
             <li><router-link to="/">Planner</router-link></li>
             <li><router-link to="/create-meeting">Create Meeting</router-link></li>
-            <li><router-link to="/reminder">Reminder</router-link></li>
+            <li><router-link to="/reminder">Set Reminder</router-link></li>
          </ul>
          <div class="user-wrapper" >
             <div @click="toggleProfileMenu" class="profile">

@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <h1 class="mt">Meeting Planner</h1>
-  
-    <h3  class="mt">Tasks</h3>
+    <ModalItem v-if="modalActive" :modalMessage="modalMessage" v-on:close-modal="closeModal"/>
+    <h3  class="mt">Meetings</h3>
 
     <div v-if="tasks.length === 0" class="mt-4">
       <p>No tasks found.</p>
@@ -16,11 +16,13 @@
           <div class="right-icon">
           
             <span v-if="timeRemaining[index]">
-              {{ timeRemaining[index].days }} days,
-              {{ timeRemaining[index].hours }} hrs,
-              {{ timeRemaining[index].minutes }} min,
-              {{ timeRemaining[index].seconds }} sec
+              <span v-if="timeRemaining[index].days>0">{{ timeRemaining[index].days }} days</span>
+              <span v-if="!timeRemaining[index].days&&timeRemaining[index].hours>0"> {{ timeRemaining[index].hours }} hrs</span>
+              <span v-if="!timeRemaining[index].days&&!timeRemaining[index].hours&&timeRemaining[index].minutes>0">{{ timeRemaining[index].minutes }} min</span>
+              <span v-if="!timeRemaining[index].days&&!timeRemaining[index].hours&&!timeRemaining[index].minutes&&timeRemaining[index].seconds>0">{{ timeRemaining[index].seconds }} sec</span>
+              
             </span>
+            <span v-if="!timeRemaining[index].seconds">meeting Started</span>
               <i @click="toggleEdit" v-if="!edit" class="fa-solid fa-ellipsis-vertical">
                </i>
               <i class="fa-regular fa-pen-to-square"  v-if="edit"></i>
@@ -34,17 +36,25 @@
 </template>
 
 <script>
+ import ModalItem from "@/components/ModalItem";
 import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
       edit: null,
+      modalActive: false,
     };
   },
+  components: {
+        ModalItem
+      },
   methods: {
     toggleEdit(){
       this.edit= !this.edit;
     },
+    closeModal() {
+        this.modalActive = !this.modalActive;
+      },
     updateTimeRemaining() {
       this.timer = setInterval(() => {
         this.getTasks();
@@ -68,7 +78,18 @@ export default {
         const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
         return { days, hours, minutes, seconds };
       });
-    }
+    },
+    modalMessage() {
+      const now = new Date();
+     this.tasks.map(task => {// Assuming you want to check the first task in the array
+
+      if (this.timeRemaining.hours < 24 && now.getHours() === 20 && now.getMinutes() === 7) {
+        return `You have a meeting today at ${task.time}`;
+      }
+      this.modalActive = !this.modalActive;
+      return ''; // Return an empty string if the condition is not met
+    })
+   }
   },
   created(){
     this.getTasks();
