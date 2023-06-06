@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     <h1 class="mt">Meeting Planner</h1>
+  
+    <h3  class="mt">Tasks</h3>
 
     <div v-if="tasks.length === 0" class="mt-4">
       <p>No tasks found.</p>
@@ -9,10 +11,16 @@
     <ul v-else class="list-group mt-4">
       <li v-for="(task, index) in tasks" :key="index" class="list-group-item">
         <div class="list" >
-          <div  @click="toggleEdit">{{ index + 1 }}. {{ task.title }}</div>
+          <div  @click="toggleEdit"> {{ index + 1 }}.   <a :href="task.link"> {{ task.title }} - {{ task.platform }} </a></div>
         
           <div class="right-icon">
-           <span> {{ task.timeRemaining }} </span>
+          
+            <span v-if="timeRemaining[index]">
+              {{ timeRemaining[index].days }} days,
+              {{ timeRemaining[index].hours }} hrs,
+              {{ timeRemaining[index].minutes }} min,
+              {{ timeRemaining[index].seconds }} sec
+            </span>
               <i @click="toggleEdit" v-if="!edit" class="fa-solid fa-ellipsis-vertical">
                </i>
               <i class="fa-regular fa-pen-to-square"  v-if="edit"></i>
@@ -26,14 +34,10 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      tasks: [
-        { id: 1, title: 'Full Stack Development- Zoom' , timeRemaining: 34},
-        { id: 2, title: 'Interview Walk Through- Google meet', timeRemaining: 12 },
-        { id: 3, title: 'Mpesa Integration- Zoom', timeRemaining: 56 },
-      ],
       edit: null,
     };
   },
@@ -41,7 +45,39 @@ export default {
     toggleEdit(){
       this.edit= !this.edit;
     },
-  }
+    updateTimeRemaining() {
+      this.timer = setInterval(() => {
+        this.getTasks();
+      }, 1000);
+    },
+    ...mapActions(['getTasks']),
+  },
+  computed: {
+    ...mapState(['tasks']),
+    timeRemaining() {
+      const now = new Date();
+      return this.tasks.map(task => {
+        const taskDate = new Date(task.date + ' ' + task.time + ':00');
+        if (isNaN(taskDate.getTime())) {
+          return null;
+        }
+        const timeDiff = taskDate.getTime() - now.getTime();
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        return { days, hours, minutes, seconds };
+      });
+    }
+  },
+  created(){
+    this.getTasks();
+    this.updateTimeRemaining();
+  },
+  destroyed() {
+    clearInterval(this.timer);
+  },
+
 };
 </script>
 

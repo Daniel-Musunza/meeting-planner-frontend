@@ -39,7 +39,7 @@
                                 <input type="text"
                                     class="form-control form-control-lg input-lg "
                                    v-model.trim="username"
-                                    placeholder="Your Name" required>
+                                    placeholder="Username" required>
                                 <div class="form-control-position">
                                     <i class="ft-user"></i>
                                 </div>
@@ -48,7 +48,7 @@
                                 <input type="text"
                                     class="form-control form-control-lg input-lg "
                                    v-model.trim="email"
-                                    placeholder="Enter Your Email" required>
+                                    placeholder="Email" required>
                                 <div class="form-control-position">
                                     <i class="ft-user"></i>
                                 </div>
@@ -57,8 +57,29 @@
                                 <input type="text"
                                     class="form-control form-control-lg input-lg "
                                    v-model.trim="title"
-                                    placeholder="Enter Meeting Title" required>
+                                    placeholder="Title" required>
                               </fieldset>
+                              <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text"
+                                    class="form-control form-control-lg input-lg "
+                                   v-model.trim="meeting_id"
+                                    placeholder="Meeting ID" required>
+                              </fieldset>
+                              <fieldset class="form-group position-relative has-icon-left">
+                                    <div class="input-container">
+                                    <input
+                                        :type="showPassword ? 'text' : 'password'"
+                                        class="form-control form-control-lg input-lg"
+                                        v-model.trim="password"
+                                        placeholder="Password"
+                                        required
+                                    >
+                                    <span class="show-password-icon" @click="togglePasswordVisibility">
+                                        <i class="fas" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                    </span>
+                                    </div>
+                            </fieldset>
+
                               <div class="form-group">
                                 <h5>Meeting Application</h5> 
                                 <select name="field" class="form-control form-control-lg input-lg" required  v-model="meeting_app">          
@@ -96,6 +117,8 @@ export default {
               error: null,
               loading: null,
               meeting_app: null,
+              password: '',
+              showPassword: false
 
           };
       },
@@ -103,6 +126,9 @@ export default {
         TheLoader
       },
       methods: {
+        togglePasswordVisibility() {
+        this.showPassword = !this.showPassword;
+        },
         createMeeting() {
             this.loading = true;
             const data = {
@@ -176,6 +202,22 @@ export default {
 </script>
 
 <style scoped>
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-container .form-control {
+  padding-right: 40px; /* Adjust the value as needed */
+}
+
+.input-container .show-password-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Adjust the value as needed */
+  transform: translateY(-50%);
+  cursor: pointer;
+}
 .content {
     margin-top: 40px;
     margin-left: 500px;
