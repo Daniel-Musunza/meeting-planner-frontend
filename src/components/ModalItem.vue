@@ -1,6 +1,6 @@
 <template>
     <div class="modal">
-      <div class="modal-content">
+      <div class="modal-content"  @click="closeModal">
                 <p>{{ this.modalMessage }}</p>
                 <audio loop autoplay>
                     <source src="../assets/Meetinginmybed.mp3" type="audio/mpeg">
@@ -67,6 +67,7 @@
     background-image: linear-gradient(#212121, #212121),  linear-gradient(137.48deg, #ffdb3b 10%,#FE53BB 45%, #8F51EA 67%, #0044ff 87%);
     background-origin: border-box;
     background-clip: content-box, border-box;
+    cursor: pointer;
 }
 p {
     text-align: center;
@@ -75,6 +76,7 @@ p {
 button{
     align-self:center;
 border-radius: 10px;
+cursor: pointer;
 }
 
 

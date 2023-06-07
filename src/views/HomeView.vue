@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       edit: null,
-      modalActive: false,
+      modalActive: true,
       modalMessage: "",
     };
   },
@@ -97,7 +97,7 @@ export default {
       }
 
       
-      return '';
+      return  this.modalMessage = "You have a meeting today!!";
     }
 
   },
