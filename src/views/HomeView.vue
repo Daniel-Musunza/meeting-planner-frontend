@@ -11,7 +11,7 @@
     <ul v-else class="list-group mt-4">
       <li v-for="(task, index) in tasks" :key="index" class="list-group-item">
         <div class="list" >
-          <div  @click="toggleEdit"> {{ index + 1 }}.   <a :href="task.link"> {{ task.title }} - {{ task.platform }} </a></div>
+          <div  @click="toggleEdit"> {{ index + 1 }}.   <a :href="task.link"> {{ task.title }} - <span style="color: rgb(52, 221, 52)">{{ task.platform }} </span></a></div>
         
           <div class="right-icon">
           
@@ -43,6 +43,7 @@ export default {
     return {
       edit: null,
       modalActive: false,
+      modalMessage: "",
     };
   },
   components: {
@@ -81,15 +82,24 @@ export default {
     },
     modalMessage() {
       const now = new Date();
-     this.tasks.map(task => {// Assuming you want to check the first task in the array
 
-      if (this.timeRemaining.hours < 24 && now.getHours() === 20 && now.getMinutes() === 7) {
-        return `You have a meeting today at ${task.time}`;
+      const hasMeeting = this.tasks.some(task => {
+        const taskDate = new Date(task.date + ' ' + task.time + ':00');
+        const timeDiff = taskDate.getTime() - now.getTime();
+        const hoursRemaining = Math.floor(timeDiff / (1000 * 60 * 60));
+
+        return hoursRemaining < 24 && now.getHours() === 17 && now.getMinutes() === 49;
+      });
+
+      if (hasMeeting) {
+        this.modalActive = true;
+        return this.modalMessage = "You have a meeting today!!";
       }
-      this.modalActive = !this.modalActive;
-      return ''; // Return an empty string if the condition is not met
-    })
-   }
+
+      
+      return '';
+    }
+
   },
   created(){
     this.getTasks();
