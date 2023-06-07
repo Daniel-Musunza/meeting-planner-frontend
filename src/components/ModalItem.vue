@@ -1,6 +1,6 @@
 <template>
     <div class="modal">
-      <div class="modal-content"  @click="closeModal">
+      <div class="modal-content" >
                 <p>{{ this.modalMessage }}</p>
                 <audio loop autoplay>
                     <source src="../assets/Meetinginmybed.mp3" type="audio/mpeg">

@@ -2,6 +2,7 @@
   <div class="container">
     <h1 class="mt">Meeting Planner</h1>
     <ModalItem v-if="modalActive" :modalMessage="modalMessage" v-on:close-modal="closeModal"/>
+    {{ modalMessage }}
     <h3  class="mt">Meetings</h3>
 
     <div v-if="tasks.length === 0" class="mt-4">
@@ -20,9 +21,8 @@
               <span v-if="!timeRemaining[index].days&&timeRemaining[index].hours>0"> {{ timeRemaining[index].hours }} hrs</span>
               <span v-if="!timeRemaining[index].days&&!timeRemaining[index].hours&&timeRemaining[index].minutes>0">{{ timeRemaining[index].minutes }} min</span>
               <span v-if="!timeRemaining[index].days&&!timeRemaining[index].hours&&!timeRemaining[index].minutes&&timeRemaining[index].seconds>0">{{ timeRemaining[index].seconds }} sec</span>
-              
+              <span v-if="timeRemaining[index].seconds<0">Started</span>
             </span>
-            <span v-if="!timeRemaining[index].seconds">meeting Started</span>
               <i @click="toggleEdit" v-if="!edit" class="fa-solid fa-ellipsis-vertical">
                </i>
               <i class="fa-regular fa-pen-to-square"  v-if="edit"></i>
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       edit: null,
-      modalActive: true,
+      modalActive: false,
       modalMessage: "",
     };
   },
@@ -88,17 +88,18 @@ export default {
         const timeDiff = taskDate.getTime() - now.getTime();
         const hoursRemaining = Math.floor(timeDiff / (1000 * 60 * 60));
 
-        return hoursRemaining < 24 && now.getHours() === 17 && now.getMinutes() === 49;
+        return hoursRemaining < 24 && now.getHours() === 20 && now.getMinutes() === 5;
       });
 
       if (hasMeeting) {
         this.modalActive = true;
-        return this.modalMessage = "You have a meeting today!!";
+        return this.modalMessage = 'You have a meeting today';
       }
 
-      
-      return  this.modalMessage = "You have a meeting today!!";
+      this.modalActive = false;
+      return '';
     }
+
 
   },
   created(){
