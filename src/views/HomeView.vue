@@ -1,8 +1,6 @@
 <template>
   <div class="container">
     <h1 class="mt">Meeting Planner</h1>
-    <ModalItem v-if="modalActive" :modalMessage="modalMessage" v-on:close-modal="closeModal"/>
-    {{ modalMessage }}
     <h3  class="mt">Meetings</h3>
 
     <div v-if="tasks.length === 0" class="mt-4">
@@ -36,26 +34,17 @@
 </template>
 
 <script>
- import ModalItem from "@/components/ModalItem";
 import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
       edit: null,
-      modalActive: false,
-      modalMessage: "",
     };
   },
-  components: {
-        ModalItem
-      },
   methods: {
     toggleEdit(){
       this.edit= !this.edit;
     },
-    closeModal() {
-        this.modalActive = !this.modalActive;
-      },
     updateTimeRemaining() {
       this.timer = setInterval(() => {
         this.getTasks();
@@ -80,25 +69,7 @@ export default {
         return { days, hours, minutes, seconds };
       });
     },
-    modalMessage() {
-      const now = new Date();
 
-      const hasMeeting = this.tasks.some(task => {
-        const taskDate = new Date(task.date + ' ' + task.time + ':00');
-        const timeDiff = taskDate.getTime() - now.getTime();
-        const hoursRemaining = Math.floor(timeDiff / (1000 * 60 * 60));
-
-        return hoursRemaining < 24 && now.getHours() === 8 && now.getMinutes() === 0;
-      });
-
-      if (hasMeeting) {
-        this.modalActive = true;
-        return this.modalMessage = 'You have a meeting today';
-      }
-
-      this.modalActive = false;
-      return '';
-    }
 
 
   },

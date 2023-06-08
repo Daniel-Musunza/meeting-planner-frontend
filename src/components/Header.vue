@@ -19,16 +19,9 @@
             <div class="info">
               <div class="right">
                 <h4>Musunza Festus</h4>
-        
-                <br>
-               
                 <router-link to="/profile-view"><i class="fa-regular fa-user" ></i>View Profile</router-link>
-                
-               
                 <hr>
-                <br>
                 <div ><i class="fa-solid fa-user-lock"></i>Logout</div>
-                <br>
               </div>
             </div>
           </div> 
@@ -83,10 +76,16 @@ export default {
     border-radius: 10px;
     top: 60px;
     right: 0; 
-    width: 270px;
+    width: 200px;
     background-color: #fff;
     box-shadow: 0 4px 0px -1px #79aae6;
     z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  i{
+    padding: 10px;
   }
 header{
     position: fixed;
@@ -94,6 +93,7 @@ header{
      max-height: fit-content;
      font-size: medium;
      width: 100%;
+     z-index: 999;
 }
 .header{
     background-color: #fbf9f9;

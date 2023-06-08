@@ -2,10 +2,11 @@
     <div class="modal">
       <div class="modal-content" >
                 <p>{{ this.modalMessage }}</p>
-                <audio loop autoplay>
-                    <source src="../assets/Meetinginmybed.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
+                <audio loop autoplay :muted="!modalMessage">
+                  <source src="@/assets/Meetinginmybed.mp3" type="audio/mpeg">
+                  Your browser does not support the audio element.
                 </audio>
+
               
                <div id="container-stars">
                    <div id="stars"></div>
@@ -15,7 +16,8 @@
                    <div class="circle"></div>
                    <div class="circle"></div>
                </div>
-               <button @click="closeModal">Close</button>
+               <button @click="$emit('close')">Close</button>
+
         
       </div>
     
@@ -25,17 +27,7 @@
   </template>  
 <script>
     export default {
-        props: ["modalMessage"],
-        methods: {
-            closeModal() {
-                this.$emit("close-modal");
-            }
-        },
-        data(){
-            return{
-              
-            }
-        }
+      props: ["modalMessage"],
     }
 </script>
 <style scoped>
