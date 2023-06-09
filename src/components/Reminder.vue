@@ -22,7 +22,7 @@
                 <div class="card-header border-0">
                     <div class="card-title text-center">
                         <div class="p-1">
-                            <h3>Set Reminder</h3>
+                            <h3>New Meeting</h3>
                           
                            
                         </div>
@@ -75,7 +75,7 @@
                                 </div>
                               </fieldset>
                             <button type="submit" @click.prevent="addreminder()" class="btn blue-bg btn-lg btn-block">
-                              Set
+                              Add
                             </button>
                         </form>
                     </div>
@@ -121,19 +121,20 @@
         })
           .then(response => {
             if (response.ok) {
-              console.log('reminder added successfully!');
+              alert('meeting added successfully!');
         
             
             } else {
-              console.log('Failed to add reminder to data.json');
+              alert('Failed to add Meeting');
             };
-            this.loading = false;
+            
           })
           .catch(error => {
             console.log('An error occurred:', error);
             this.loading = false;
           });
-
+          this.loading = false;
+        this.$router.push('/');
         },
     },
   };

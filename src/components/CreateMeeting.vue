@@ -131,18 +131,13 @@ export default {
         },
         createMeeting() {
             this.loading = true;
-            const data = {
-                email: this.email,
-            };
-
-            fetch("http://localhost:3444/meeting", {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-                .then((response) => {
+                const data = {
+                    email: this.email,
+                };
+                console.log(this.username);
+                axios
+                    .post("http://localhost:3444/meeting", data)
+                    .then((response) => {
                 if (response.ok) {
                     return response.json();
                 } else {
