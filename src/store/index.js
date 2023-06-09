@@ -14,7 +14,7 @@ export default createStore({
   },
   actions: {
     getTasks({ commit }) {
-      fetch('http://localhost:3444/data.json')
+      fetch('http://192.168.0.112:3444/data.json')
         .then((response) => response.json())  // Parse the JSON response
         .then((data) => {
           commit('setTasks', data)  // Commit the parsed data to the store
