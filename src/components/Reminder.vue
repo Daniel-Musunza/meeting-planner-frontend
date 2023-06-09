@@ -93,59 +93,64 @@
     </div>
 </template>
 
-  <script>
-   import TheLoader from "@/components/TheLoader";
-  export default {
-    data() {
-      return {
-        reminder: {
-          title: '',
-          link: '',
-          platform: '',
-          date: '',
-          time: '',
-        },
-        loading: null,
-      };
-    },
-    components: {
-        TheLoader
+<script>
+import TheLoader from "@/components/TheLoader";
+export default {
+  data() {
+    return {
+      reminder: {
+        id: '', // Add id property
+        title: '',
+        link: '',
+        platform: '',
+        date: '',
+        time: '',
       },
-    methods: {
-      addreminder() {
-        if(!this.title==""&&!this.link==""&&!this.platform==""&&!this.date==""&&!this.time=="") {
-          this.loading = true;
-          const newData = this.reminder;
-          // Convert reminder object to JSON
-          fetch('http://192.168.0.112:3444/addreminder', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newData),
-          })
-            .then(response => {
-              if (response.ok) {
-                alert('meeting added successfully!');
-          
-              
-              } else {
-                alert('Failed to add Meeting');
-              };
-              
-            })
-            .catch(error => {
-              console.log('An error occurred:', error);
-              this.loading = false;
-            });
+      loading: null,
+    };
+  },
+  components: {
+    TheLoader
+  },
+  methods: {
+    addreminder() {
+      if (this.title != "" && !this.link != "" && !this.platform != "" && !this.date != "" && !this.time != "") {
+        this.loading = true;
+        
+        // Generate a unique ID for the task
+        const id = Date.now().toString();
+        this.reminder.id = id;
+
+        const newData = this.reminder;
+        // Convert reminder object to JSON
+        fetch('http://192.168.0.112:3444/addreminder', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newData),
+        })
+          .then(response => {
+            if (response.ok) {
+              alert('Meeting added successfully!');
+              this.$router.push('/');
+            } else {
+              alert('Failed to add Meeting');
+            }
             this.loading = false;
-          this.$router.push('/');
-          };
-          alert("please fill all the fields!!!!")
-        }
-      },
-  };
-  </script>
+          })
+          .catch(error => {
+            console.log('An error occurred:', error);
+            this.loading = false;
+          });
+      } else {
+        alert("Please fill all the fields!");
+      }
+    },
+  },
+};
+</script>
+
   
   <style scoped>
   .content {

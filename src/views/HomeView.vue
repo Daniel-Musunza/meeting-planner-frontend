@@ -27,7 +27,7 @@
             <span>
               <i v-if="!edit" class="fa-solid fa-ellipsis-vertical">
                </i>
-              <i class="fa-solid fa-trash-can" @click="deleteData(task)" v-if="edit"></i>
+             <span class="trash" @click="toggleEdit"> <i class="fa-solid fa-trash-can" @click="deleteData(task)" v-if="edit"></i> </span>
             </span>
           </div>
         </div>
@@ -57,11 +57,9 @@ export default {
     },
     async deleteData(task) {
       try {
-        const response = await fetch(`http://192.168.0.112:3444/api/data/${task}`, {
-          method: 'DELETE'
-        });
+        const response = await axios.delete(`http://192.168.0.112:3444/api/data/delete/${task.id}`);
 
-        if (response.ok) {
+        if (response.status === 200) {
           // Delete request was successful
           alert('Successfully deleted.');
           // Update the data in your Vue component after successful deletion if needed
@@ -73,8 +71,8 @@ export default {
         console.error(error);
         // Handle error scenario if necessary
       }
-    
     },
+
 
     ...mapActions(['getTasks']),
   },
@@ -95,9 +93,6 @@ export default {
         return { days, hours, minutes, seconds };
       });
     },
-
-
-
   },
   created(){
     this.getTasks();
@@ -144,6 +139,9 @@ span{
 }
 .fa-solid{
   cursor: pointer;
+}
+.trash:hover {
+  color: red;
 }
 h2{
   color:rgb(12, 113, 246);
