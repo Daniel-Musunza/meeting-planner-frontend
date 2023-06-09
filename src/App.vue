@@ -35,18 +35,29 @@ export default {
         const timeDiff = taskDate.getTime() - now.getTime();
         const hoursRemaining = Math.floor(timeDiff / (1000 * 60 * 60));
 
-        return hoursRemaining < 24 && now.getHours() === 11 && now.getMinutes() === 45;
+        return hoursRemaining < 24 && now.getHours() === 16 && now.getMinutes() === 2;
+      });
+
+      const inFiveMinutes = this.tasks.some(task => {
+        const taskDate = new Date(task.date + ' ' + task.time + ':00');
+        const timeDiff = taskDate.getTime() - now.getTime();
+        const minutesRemaining = Math.floor(timeDiff / (1000 * 60));
+
+        return minutesRemaining === 5;
       });
 
       if (hasMeeting) {
         this.modalActive = true;
-
-        return this.modalMessage= 'You have a meeting today';
+        return this.modalMessage = 'You have a meeting today';
+      } else if (inFiveMinutes) {
+        this.modalActive = true;
+        return this.modalMessage = 'A meeting is about to start in the next 5 minutes';
       }
 
       this.modalActive = false;
       return '';
     }
+
   },
   created(){
     this.getTasks();

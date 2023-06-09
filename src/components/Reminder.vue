@@ -60,20 +60,24 @@
                               
                               <fieldset class="form-group position-relative has-icon-left">
                                 <input type="date"
-                                    class="form-control form-control-lg input-lg "
-                                   v-model.trim="reminder.date"
-                                   required>
+                                      class="form-control form-control-lg input-lg"
+                                      v-model.trim="reminder.date"
+                                      required
+                                      placeholder="Select a date">
                                 <div class="form-control-position">
                                 </div>
                               </fieldset>
+
                               <fieldset class="form-group position-relative has-icon-left">
                                 <input type="time"
-                                    class="form-control form-control-lg input-lg "
-                                   v-model.trim="reminder.time"
-                                     required>
+                                      class="form-control form-control-lg input-lg"
+                                      v-model.trim="reminder.time"
+                                      required
+                                      placeholder="Select a time">
                                 <div class="form-control-position">
                                 </div>
                               </fieldset>
+
                             <button type="submit" @click.prevent="addreminder()" class="btn blue-bg btn-lg btn-block">
                               Add
                             </button>
@@ -109,34 +113,37 @@
       },
     methods: {
       addreminder() {
-        this.loading = true;
-        const newData = this.reminder;
-        // Convert reminder object to JSON
-        fetch('http://192.168.0.112:3444/addreminder', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newData),
-        })
-          .then(response => {
-            if (response.ok) {
-              alert('meeting added successfully!');
-        
-            
-            } else {
-              alert('Failed to add Meeting');
-            };
-            
+        if(!this.title==""&&!this.link==""&&!this.platform==""&&!this.date==""&&!this.time=="") {
+          this.loading = true;
+          const newData = this.reminder;
+          // Convert reminder object to JSON
+          fetch('http://192.168.0.112:3444/addreminder', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newData),
           })
-          .catch(error => {
-            console.log('An error occurred:', error);
+            .then(response => {
+              if (response.ok) {
+                alert('meeting added successfully!');
+          
+              
+              } else {
+                alert('Failed to add Meeting');
+              };
+              
+            })
+            .catch(error => {
+              console.log('An error occurred:', error);
+              this.loading = false;
+            });
             this.loading = false;
-          });
-          this.loading = false;
-        this.$router.push('/');
-        },
-    },
+          this.$router.push('/');
+          };
+          alert("please fill all the fields!!!!")
+        }
+      },
   };
   </script>
   

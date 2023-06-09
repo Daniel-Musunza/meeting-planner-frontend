@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="mt">Meeting Planner</h1>
+    <h2 class="mt">Meeting Planner</h2>
     <h3  class="mt">Meetings</h3>
 
     <div v-if="tasks.length === 0" class="mt-4">
@@ -9,8 +9,11 @@
 
     <ul v-else class="list-group mt-4">
       <li v-for="(task, index) in tasks" :key="index" class="list-group-item">
-        <div class="list" >
-          <div  @click="toggleEdit"> {{ index + 1 }}.   <a :href="task.link"> {{ task.title }} - <span style="color: rgb(52, 221, 52)">{{ task.platform }} </span></a></div>
+        <div class="list"  @click="toggleEdit">
+          <div class="left-icon" > 
+           <span> {{ index + 1 }}. </span>
+          <a :href="task.link"> {{ task.title }} - <span style="color: rgb(52, 221, 52)">{{ task.platform }} </span></a>
+          </div>
         
           <div class="right-icon">
           
@@ -21,10 +24,11 @@
               <span v-if="!timeRemaining[index].days&&!timeRemaining[index].hours&&!timeRemaining[index].minutes&&timeRemaining[index].seconds>0">{{ timeRemaining[index].seconds }} sec</span>
               <span v-if="timeRemaining[index].seconds<0">Started</span>
             </span>
-              <i @click="toggleEdit" v-if="!edit" class="fa-solid fa-ellipsis-vertical">
+            <span>
+              <i v-if="!edit" class="fa-solid fa-ellipsis-vertical">
                </i>
-              <i class="fa-regular fa-pen-to-square"  v-if="edit"></i>
-              <i class="fa-solid fa-trash-can"  v-if="edit"></i>
+              <i class="fa-solid fa-trash-can" @click="deleteData(task)" v-if="edit"></i>
+            </span>
           </div>
         </div>
       </li>
@@ -35,6 +39,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -50,6 +55,27 @@ export default {
         this.getTasks();
       }, 1000);
     },
+    async deleteData(task) {
+      try {
+        const response = await fetch(`http://192.168.0.112:3444/api/data/${task}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          // Delete request was successful
+          alert('Successfully deleted.');
+          // Update the data in your Vue component after successful deletion if needed
+        } else {
+          // Delete request failed
+          throw new Error('Delete request failed.');
+        }
+      } catch (error) {
+        console.error(error);
+        // Handle error scenario if necessary
+      }
+    
+    },
+
     ...mapActions(['getTasks']),
   },
   computed: {
@@ -102,11 +128,27 @@ export default {
 }
 .right-icon {
   margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.left-icon {
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
 span{
   color: rgb(32, 113, 244);
   padding-right: 10px;
 }
-
+.fa-solid{
+  cursor: pointer;
+}
+h2{
+  color:rgb(12, 113, 246);
+  font-weight: 700;
+  margin-bottom: 0;
+}
 /* Add any custom styles for the Planner component */
 </style>

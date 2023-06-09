@@ -70,6 +70,10 @@ export default {
     color: #fff;
     background-color: #303030;
     z-index: 999px;
+   
+  }
+  .user-wrapper {
+    margin-right: 10px;
   }
 .profile-menu {
     position: absolute;
@@ -91,8 +95,9 @@ header{
     position: fixed;
      top: 0px;
      max-height: fit-content;
-     font-size: medium;
+     font-size: 20px;
      width: 100%;
+     margin-right: 0;
      z-index: 999;
 }
 .header{
@@ -103,6 +108,7 @@ header{
     justify-content: flex-end;
     margin-right: 20px;
    align-items: center;
+   width: 100%;
 }
 li{
     list-style: none;
@@ -117,7 +123,7 @@ li{
     display: flex;
     flex-direction: row;
     justify-content: center;
-   font-size: smaller;
+   font-size: 20px;
 }
 }
 </style>
