@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import CreateMeeting from '@/components/CreateMeeting.vue'
 import Reminder from '../components/Reminder.vue'
 
 const routes = [
@@ -8,11 +7,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView
-  },
-  {
-    path: '/create-meeting',
-    name: 'create-meeting',
-    component: CreateMeeting
   },
   {
     path: '/reminder',
