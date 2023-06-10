@@ -35,7 +35,7 @@ export default {
         const timeDiff = taskDate.getTime() - now.getTime();
         const hoursRemaining = Math.floor(timeDiff / (1000 * 60 * 60));
 
-        return hoursRemaining < 24 && now.getHours() === 16 && now.getMinutes() === 2;
+        return hoursRemaining < 24 && now.getHours() === 8 && now.getMinutes() === 0;
       });
 
       const inFiveMinutes = this.tasks.some(task => {
