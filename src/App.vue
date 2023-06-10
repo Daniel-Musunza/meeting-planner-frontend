@@ -13,12 +13,11 @@ export default {
     ModalItem
   },
   data() {
-  return {
-    modalActive: null,
-    modalMessage: "",
-  };
-},
-
+    return {
+      modalActive: null,
+      modalMessage: "",
+    };
+  },
   methods: {
     closeModal() {
         this.modalActive = !this.modalActive;
@@ -37,7 +36,6 @@ export default {
 
         return hoursRemaining < 24 && now.getHours() === 8 && now.getMinutes() === 0;
       });
-
       const inFiveMinutes = this.tasks.some(task => {
         const taskDate = new Date(task.date + ' ' + task.time + ':00');
         const timeDiff = taskDate.getTime() - now.getTime();
