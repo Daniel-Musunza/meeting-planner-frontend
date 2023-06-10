@@ -72,8 +72,6 @@ export default {
         // Handle error scenario if necessary
       }
     },
-
-
     ...mapActions(['getTasks']),
   },
   computed: {
@@ -101,7 +99,6 @@ export default {
   destroyed() {
     clearInterval(this.timer);
   },
-
 };
 </script>
 
