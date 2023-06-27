@@ -56,22 +56,24 @@ export default {
       }, 1000);
     },
     async deleteData(task) {
-      try {
-        const response = await axios.delete(`http://192.168.0.112:3444/api/data/delete/${task.id}`);
+    try {
+      const response = await axios.delete(`http://localhost:3444/api/data/delete/${task.id}`);
 
-        if (response.status === 200) {
-          // Delete request was successful
-          alert('Successfully deleted.');
-          // Update the data in your Vue component after successful deletion if needed
-        } else {
-          // Delete request failed
-          throw new Error('Delete request failed.');
-        }
-      } catch (error) {
-        console.error(error);
-        // Handle error scenario if necessary
+      if (response.status === 200) {
+        // Delete request was successful
+        alert('Successfully deleted.');
+        // Update the data in your Vue component after successful deletion if needed
+      } else {
+        // Delete request failed
+        throw new Error('Delete request failed.');
       }
-    },
+    } catch (error) {
+      console.error(`Error is ${error}`);
+      // Handle error scenario if necessary
+    }
+  },
+
+
     ...mapActions(['getTasks']),
   },
   computed: {

@@ -123,7 +123,7 @@ export default {
 
         const newData = this.reminder;
         // Convert reminder object to JSON
-        fetch('http://192.168.0.112:3444/addreminder', {
+        fetch('http://localhost:3444/addreminder', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
